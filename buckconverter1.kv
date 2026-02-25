@@ -1,0 +1,804 @@
+
+MyScreenManager:
+	MyMainScreen:
+	MySecondScreen:
+	MyThirdScreen:
+		
+<CustomToolbarMain>:
+	size_hint_y: None
+	height: self.theme_cls.standard_increment
+	padding: "2dp"	
+	#spacing:"3dp"		
+<MyMainScreen>:
+	name:"main_screen"
+	id:main
+	
+	CustomToolbarMain:
+		id: toolbar
+		elevation: 10
+		pos_hint: {"top": 1}
+		
+		MDIconButton:
+			id: button_1
+			icon: "menu"
+			user_font_size:dp(48)
+			pos_hint: {"center_y": .5}
+			size_hint_x:None
+			width:dp(50)
+			on_release:
+				root.manager.current="main_screen"
+			
+		MDLabel:
+			text: "Luggya Electronics"
+			bold:True
+			markup:True
+			font_style:"Body2"
+			font_size:dp(32)
+			pos_hint: {"center_y": .5}
+			size_h: None
+			width: self.texture_size[0]
+			text_size: None,None
+			font_name: "Helvetica LT 97 Black Condensed.ttf"
+			size_hint_x:None
+			width: dp(240)
+			
+			
+		MDIconButton:
+			id: button_2
+			icon: "magnify"
+			user_font_size:dp(48)
+			pos_hint: {"center_y": .5}
+			size_hint_x:None
+			width:dp(68)
+			on_release: app.menu_2.open()
+			
+	Image:
+		source:"BuckConverter3.jpg"
+		size_hint:None,None
+		width:dp(250)
+		height:dp(343)
+		pos_hint:{"center_x":.75, "center_y":.57}
+	
+	Image:
+		source:"BuckSchematic2.jpg"
+		size_hint:None,None
+		height:dp(340)
+		width:dp(340)
+		allow_stretch:True
+		pos_hint:{"center_x":.5, "center_y":.79}
+	
+	MDLabel:
+		text:"    BUCK"
+		font_size:dp(38)
+		halign:"left"
+		pos_hint:{ "center_y":.59}
+		font_name: "Helvetica LT 97 Black Condensed.ttf"
+	
+	MDLabel:
+		text:" COVERTER"
+		font_size:dp(38)
+		halign:"left"
+		pos_hint:{ "center_y":.53}
+		font_name: "Helvetica LT 97 Black Condensed.ttf"
+	
+	ScrollView:
+		orientation:"vertical"
+		size_hint_y:None
+		height:dp(300)
+		effect_cls: "ScrollEffect"
+		#size_hint_y: None
+         #height: self.minimum_height
+        
+		MDGridLayout:
+			cols:3
+			adaptive_height:True
+			padding:dp(2)
+			spacing:dp(5)
+			adaptive_width:True
+			
+			MDCheckbox:
+				id:box1
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"INPUT VOLTAGE:"
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				font_size:dp(17)
+				size_hint_x:None
+				width:dp(140)
+			MDTextField:
+				mode:"round"
+				id: field1
+				text:"15"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"Available VIn"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "alpha-v-box-outline"
+				on_text_validate:
+					root.check1()
+					field2.focus=True			
+					
+			MDCheckbox:
+				id:box2
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"OUTPUT VOLTAGE:"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				size_hint_x:None
+				width:dp(130)
+			MDTextField:
+				mode:"round"
+				id: field2
+				text:"5"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"Required VOut"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "alpha-v-box-outline"
+				on_text_validate:
+					root.check2()
+					field3.focus=True
+			
+					
+			MDCheckbox:
+				id:box3
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"OUTPUT CURRENT:"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				size_hint_x:None
+				width:dp(140)
+			MDTextField:
+				mode:"round"
+				id: field3
+				text:"2"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"Required Amps"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "alpha-a-box-outline"
+				on_text_validate:
+					root.check3()
+					field4.focus=True
+			
+			MDCheckbox:
+				id:box4
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"RIPPLE CURRENT:"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				size_hint_x:None
+				width:dp(140)
+			MDTextField:
+				mode:"round"
+				id: field4
+				text:"20"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"Must Be < 40%"
+				helper_text_mode: "on_focus"
+				helper_text:"Hello"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "percent-outline"
+				on_text_validate:
+					root.check4()
+					field5.focus=True
+			
+			MDCheckbox:
+				id:box5
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"RIPPLE VOLTAGE:"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				size_hint_x:None
+				width:dp(140)
+			MDTextField:
+				mode:"round"
+				id: field5
+				text:"0.02"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"Required VRip"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "alpha-v-box-outline"
+				on_text_validate:
+					root.check5()
+					field6.focus=True
+			
+			MDCheckbox:
+				id:box6
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"EFFICIENCY:"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				size_hint_x:None
+				width:dp(140)
+			MDTextField:
+				mode:"round"
+				id: field6
+				text:"90"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"Must be 90%"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "percent-outline"
+				on_text_validate:
+					root.check6()
+					field7.focus=True
+			
+			MDCheckbox:
+				id:box7
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"FREQUENCY:"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				size_hint_x:None
+				width:dp(140)
+			MDTextField:
+				mode:"round"
+				id: field7
+				text:"500000"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"Switching Frequency"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "alpha-h-box-outline"
+				on_text_validate:
+					root.check7()
+					field8.focus=True
+			
+			MDCheckbox:
+				id:box8
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"IC REF VOLTAGE:"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				size_hint_x:None
+				width:dp(140)
+			MDTextField:
+				mode:"round"
+				id: field8
+				text:"1.25"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"Switching IC FB Volts"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "alpha-v-box-outline"
+				on_text_validate:
+					root.check8()
+					field9.focus=True
+			
+			MDCheckbox:
+				id:box9
+				selected_color:app.theme_cls.accent_color
+				size_hint_x:None
+				width:dp(28)
+			MDLabel:
+				text:"FEEDBACK R2:"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				size_hint_x:None
+				width:dp(140)
+			MDTextField:
+				mode:"round"
+				id: field9
+				text:"5100"
+				font_size:dp(17)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text:"FB Resistor"
+				markup:True
+				size_hint_x:None
+				width:dp(160)
+				pos_hint:{"center_x":.5}
+				required:True
+				multiline:False
+				input_filter:"float"
+				icon_right: "omega"
+				on_text_validate:
+					root.check9()
+					
+			Widget:
+			Widget:
+			Widget:
+					
+			Widget:
+				
+			MDFillRoundFlatButton:
+				id:btn
+				text:"CLEAR FIELDS"
+				pos_hint:{"center_x":.7}
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				elevation_normal:12
+				on_release:
+					root.clear_field1()
+					root.clear_field2()
+					root.clear_field3()
+					root.clear_field4()
+					root.clear_field5()
+					root.clear_field6()
+					root.clear_field7()
+			Widget:
+				
+	MDFloatingActionButton:
+		elevation_normal:12
+		icon: "arrow-down-thick"
+		pos_hint:{"center_x":.9}
+		elevation_normal:12
+		on_release:
+			root.manager.current="second_screen"
+			app.MyCalculations()
+
+<CustomToolbar2>:
+	size_hint_y: None
+	height: self.theme_cls.standard_increment
+	padding: "2dp"	
+	#spacing:"3dp"
+<MySecondScreen>:
+	name:"second_screen"
+	CustomToolbar2:
+		id: toolbar
+		elevation: 10
+		pos_hint: {"top": 1}
+		
+		MDIconButton:
+			id: button_1
+			icon: "arrow-left-bold"
+			user_font_size:dp(48)
+			pos_hint: {"center_y": .5}
+			size_hint_x:None
+			width:dp(54)
+			on_release:
+				root.manager.current="main_screen"
+			
+		MDLabel:
+			text: "Luggya Electronics"
+			bold:True
+			markup:True
+			font_style:"Body2"
+			font_size:dp(32)
+			pos_hint: {"center_y": .5}
+			size_hint_x:None
+			width: self.texture_size[0]
+			text_size: None,None
+			font_name: "Helvetica LT 97 Black Condensed.ttf"
+			size_hint_x:None
+			width: dp(240)
+			
+			
+		MDIconButton:
+			id: button_2
+			icon: "magnify"
+			user_font_size: dp(48)
+			pos_hint: {"center_y": .5}
+			size_hint_x:None
+			width:dp(68)
+			on_release: app.menu_2.open()
+	
+	
+	MDLabel:
+		text:"CIRCUIT COMPONENTS"
+		font_size:dp(27)
+		font_name: "Helvetica LT 97 Black Condensed.ttf"
+		halign:"center"
+		pos_hint:{"center_y":.85}
+		#color: 0,0,1,1
+		
+		
+			     
+	#MDBoxLayout:
+        #orientation:"vertical"	
+        #adaptive_height:True
+        #adaptive_width:True
+        #padding:dp(5)
+		#size:dp(549),dp(200)
+		
+	ScrollView:
+		do_scroll_x:False
+		size_hint_y:None
+		height:dp(560)
+			
+		MDBoxLayout:
+			orientation:"vertical"
+			adaptive_height:True
+			size:dp(549),dp(430)
+			
+				
+			MDLabel:
+				text:"  Input Data:"
+				markup: True
+				bold:True
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"
+					
+			MDLabel:
+				id: l1
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			MDLabel:
+				id: l2
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			MDLabel:
+				id: l3
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			MDLabel:
+				id: l4
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			MDLabel:
+				id: l5
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			MDLabel:
+				id: l6
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			MDLabel:
+				id: l7
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			MDLabel:
+				id: l8
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			MDLabel:
+				id: l9
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			Widget:
+				
+					
+			MDLabel:
+				text:"  Results:"
+				markup: True
+				bold:True
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+				
+			MDLabel:
+				id:f1
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"		
+			MDLabel:
+				id:f2
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"			
+			MDLabel:
+				id:f3
+				text:""
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"
+			MDLabel:
+				id:f4
+				text:""
+				#font_size:dp(17)
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"				
+			MDLabel:
+				id:f5
+				text:""
+				#font_size:dp(17)
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"			
+			MDLabel:
+				id:f6
+				text:""
+				#font_size:dp(17)
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"		
+			MDLabel:
+				id:f7
+				text:""
+				#font_size:dp(17)
+				#font_name: "Helvetica LT 97 Black Condedsed.ttf"					
+			MDLabel:
+				id:f8
+				text:""
+				#font_size:dp(17)
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"		
+			MDLabel:
+				id:f9
+				text:""
+				#font_size:dp(17)
+				#font_name: "Helvetica LT 97 Black Condensed.ttf"			
+		
+	MDFillRoundFlatButton:
+		id:btn
+		text:"ESTIMATE LOSSES AND EFFICIENCY"
+		pos_hint:{"center_x":.5, "center_y":.06}
+		font_name: "Helvetica LT 97 Black Condensed.ttf"
+		on_release:		
+			root.manager.current="third_screen"	
+						
+			
+			
+<CustomToolbar3>:
+	size_hint_y: None
+	height: self.theme_cls.standard_increment
+	padding: "2dp"	
+	#spacing:"3dp"
+<MyThirdScreen>:
+	name:"third_screen"
+	CustomToolbar3:
+		id: toolbar
+		elevation: 10
+		pos_hint: {"top": 1}
+		
+		MDIconButton:
+			id: button_1
+			icon: "arrow-left-bold"
+			user_font_size:dp(48)
+			pos_hint: {"center_y": .5}
+			size_hint_x:None
+			width:dp(54)
+			on_release:
+				root.manager.current="main_screen"
+			
+		MDLabel:
+			text: "Luggya Electronics"
+			bold:True
+			markup:True
+			font_style:"Body2"
+			font_size:dp(32)
+			pos_hint: {"center_y": .5}
+			size_hint_x:None
+			width: self.texture_size[0]
+			text_size: None,None
+			font_name: "Helvetica LT 97 Black Condensed.ttf"
+			size_hint_x:None
+			width: dp(240)
+			
+			
+		MDIconButton:
+			id: button_2
+			icon: "magnify"
+			user_font_size: dp(48)
+			pos_hint: {"center_y": .5}
+			size_hint_x:None
+			width:dp(68)
+			on_release: app.menu_2.open()
+	
+	MDLabel:
+		text:"ESTIMATE POWER LOSSES"
+		font_size:dp(27)
+		font_name: "Helvetica LT 97 Black Condensed.ttf"
+		halign:"center"
+		pos_hint:{"center_y":.85}
+		#color: 0,0,1,1
+		
+	ScrollView:
+		do_scroll_x:False
+		size_hint_y:None
+		height:dp(530)
+		
+		MDGridLayout:
+			cols:1
+			adaptive_height:True
+			adaptive_width:True
+			padding:dp(12)
+			spacing:dp(20)
+				
+			MDTextField:
+				id: fld1
+				text:"50"
+				font_size:dp(21)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text: "CHOSEN INDUCTOR RESISTANCE(m\u03A9)"
+				helper_text_mode:"persistent"
+				helper_text:"Check The Datasheets Of This Inductor"
+				line_color_normal: 0,0,0,1
+				markup:True
+				size_hint:None,None
+				width:dp(309)
+				pos_hint:{"center_x":.2}
+				input_filter:"float"
+				mode:"fill"
+				fill_color: 0,0,0,.4
+				
+			MDTextField:
+				id: fld2
+				text:"0.3"
+				font_size:dp(21)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text: "DIODE FORWARD VOLTAGE"
+				helper_text_mode:"persistent"
+				helper_text:"Must Be <= 0.3V For a Schottky Diode"
+				line_color_normal: 0,0,0,1
+				markup:True
+				size_hint:None,None
+				width:dp(309)
+				pos_hint:{"center_x":.2}
+				input_filter:"float"
+				mode:"fill"
+				fill_color: 0,0,0,.4
+				
+			MDTextField:
+				id: fld3
+				text:"8.5"
+				font_size:dp(21)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text: "MOSFET Rds-on(m\u03A9)"
+				helper_text_mode:"persistent"
+				helper_text:"Check The Datasheets of The Mosfet"
+				line_color_normal: 0,0,0,1
+				markup:True
+				size_hint:None,None
+				width:dp(309)
+				pos_hint:{"center_x":.2}
+				input_filter:"float"
+				mode:"fill"
+				fill_color: 0,0,0,.4
+			
+			MDTextField:
+				id: fld4
+				text:"12"
+				font_size:dp(21)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text: "MOSFET ToN(nSec)"
+				helper_text_mode:"persistent"
+				helper_text:"Check In The Datasheets of The Mosfet"
+				line_color_normal: 0,0,0,1
+				markup:True
+				size_hint:None,None
+				width:dp(309)
+				pos_hint:{"center_x":.2}
+				input_filter:"float"
+				mode:"fill"
+				fill_color: 0,0,0,.4
+				
+			MDTextField:
+				id: fld5
+				text:"9"
+				font_size:dp(21)
+				font_name: "Helvetica LT 97 Black Condensed.ttf"
+				hint_text: "MOSFET ToFF(nSec):"
+				helper_text_mode:"persistent"
+				helper_text:"Check In The Datasheets of The Mosfet"
+				line_color_normal: 0,0,0,1
+				markup:True
+				size_hint:None,None
+				width:dp(309)
+				pos_hint:{"center_x":.2}
+				input_filter:"float"
+				mode:"fill"
+				fill_color: 0,0,0,.4
+			
+	MDFloatingActionButton:
+		elevation_normal:12
+		icon: "arrow-down-thick"
+		pos_hint:{"center_x":.9}
+		elevation_normal:12
+		on_release:		
+			app.my_dialog()
+			app.Losses()
+
+<Content>:
+	orientation:"vertical"
+	adaptive_height:True
+	#adaptive_width:True
+	size:dp(200),dp(150)
+	
+	MDLabel:
+		id: label1
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"
+		
+	MDLabel:
+		id: label2
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			
+	MDLabel:
+		id: label3
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+	
+	MDLabel:
+		id: label4
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			
+	MDLabel:
+		id: label5
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			
+	MDLabel:
+		id: label6
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			
+	MDLabel:
+		id: label7
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+			
+	MDLabel:
+		id: label8
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"
+		
+	MDLabel:
+		id: label9
+		text:""
+		#font_name: "Helvetica LT 97 Black Condensed.ttf"	
+				
+			
+		
+			
+	
+	
+		
+		
+		
+	
+		
+
+		
+	
