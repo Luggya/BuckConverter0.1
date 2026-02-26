@@ -1,5 +1,4 @@
 
-
 name: Android Build
 
 on:
@@ -15,15 +14,17 @@ jobs:
       BUILDOZER_ALLOW_ROOT: 1
 
     steps:
+      # 1️⃣ Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Set up Python 3.9 (stable for Buildozer)
       - name: Set up Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
 
-      # Cache Buildozer directories to speed up builds
+      # 3️⃣ Cache Buildozer directories for faster builds
       - name: Cache Buildozer directories
         uses: actions/cache@v4
         with:
@@ -32,14 +33,15 @@ jobs:
             ~/.buildozer
           key: buildozer-${{ hashFiles('buildozer.spec') }}
 
-      - name: Install system dependencies
+      # 4️⃣ Install system dependencies and Buildozer
+      - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y zip unzip wget openjdk-17-jdk
           python -m pip install --upgrade pip
           pip install buildozer==1.5.0 cython python-for-android==2023.9.16
 
-      # Pre-download Android NDK 23b to avoid urllib/tempfile crash
+      # 5️⃣ Pre-download Android NDK 23b to avoid urllib/tempfile crash
       - name: Pre-download Android NDK 23b
         run: |
           mkdir -p $HOME/.buildozer/android/platform
@@ -50,24 +52,23 @@ jobs:
             rm android-ndk-r23b-linux.zip
           fi
 
-      # Accept SDK licenses and install stable Build-Tools
-      - name: Accept SDK licenses & install SDK packages
+      # 6️⃣ Accept licenses & install stable Build-Tools 36.1.0
+      - name: Accept SDK licenses & install build-tools
         run: |
-          yes | $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-          yes | $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager \
-            "platform-tools" "platforms;android-33" "build-tools;36.1.0"
+          SDK="$HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin"
+          yes | $SDK/sdkmanager --licenses
+          yes | $SDK/sdkmanager "platform-tools" "platforms;android-33" "build-tools;36.1.0"
 
-      # Clean previous builds
+      # 7️⃣ Clean previous builds
       - name: Clean previous builds
         run: |
-          rm -rf .buildozer
-          rm -rf bin
+          rm -rf .buildozer bin
 
-      # Build APK
+      # 8️⃣ Build APK
       - name: Build Debug APK
         run: buildozer android debug
 
-      # Upload artifact
+      # 9️⃣ Upload artifact
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
