@@ -27,7 +27,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y \
-            git zip unzip openjdk-17-jdk \
+            git zip unzip wget \
+            openjdk-17-jdk \
             autoconf libtool pkg-config \
             zlib1g-dev libncurses5-dev \
             libncursesw5-dev cmake \
@@ -42,6 +43,21 @@ jobs:
         run: |
           rm -rf .buildozer
           rm -rf bin
+
+      # 🔥 CRITICAL FIX — avoid urllib tempfile crash
+      - name: Pre-download Android NDK 25b
+        run: |
+          mkdir -p $HOME/.buildozer/android/platform
+          cd $HOME/.buildozer/android/platform
+
+          if [ ! -d "android-ndk-r25b" ]; then
+            echo "Downloading NDK..."
+            wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+            unzip -q android-ndk-r25b-linux.zip
+            rm android-ndk-r25b-linux.zip
+          else
+            echo "NDK already exists."
+          fi
 
       - name: Build Debug APK
         run: buildozer android debug
