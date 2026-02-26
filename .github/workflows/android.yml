@@ -1,10 +1,9 @@
 
-name: Build Kivy APK
+name: Android CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -18,52 +17,37 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
 
-      - name: Install system dependencies
+      # Cache Buildozer global directory (SDK, NDK, etc.)
+      - name: Cache Buildozer global directory
+        uses: actions/cache@v4
+        with:
+          path: ~/.buildozer
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+
+      # Cache local .buildozer folder
+      - name: Cache local buildozer
+        uses: actions/cache@v4
+        with:
+          path: .buildozer
+          key: ${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+
+      - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y \
-            git zip unzip wget \
-            openjdk-17-jdk \
-            autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev \
-            libncursesw5-dev cmake \
-            libffi-dev libssl-dev
-
-      - name: Upgrade pip & install Buildozer
-        run: |
+          sudo apt install -y zip unzip openjdk-17-jdk
           python -m pip install --upgrade pip
-          pip install --upgrade buildozer python-for-android cython
+          pip install buildozer==1.5.0 cython
 
-      - name: Clean previous builds
-        run: |
-          rm -rf .buildozer
-          rm -rf bin
-
-      # 🔥 CRITICAL FIX — avoid urllib tempfile crash
-      - name: Pre-download Android NDK 25b
-        run: |
-          mkdir -p $HOME/.buildozer/android/platform
-          cd $HOME/.buildozer/android/platform
-
-          if [ ! -d "android-ndk-r25b" ]; then
-            echo "Downloading NDK..."
-            wget -q https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
-            unzip -q android-ndk-r25b-linux.zip
-            rm android-ndk-r25b-linux.zip
-          else
-            echo "NDK already exists."
-          fi
-
-      - name: Build Debug APK
+      - name: Build with Buildozer
         run: buildozer android debug
 
-      - name: Upload APK Artifact
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
+          name: app-debug
           path: bin/*.apk
