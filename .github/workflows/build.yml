@@ -1,4 +1,5 @@
 
+
 name: Build Kivy APK
 
 on:
@@ -11,41 +12,53 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
-    env:
-      HOME: /home/runner
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install system dependencies
+    # 🔥 Clean EVERYTHING to avoid python-for-android 404 bugs
+    - name: Remove old caches
+      run: |
+        rm -rf ~/.buildozer
+        rm -rf .buildozer
+        rm -rf bin
+
+    # 🔧 Install system dependencies
+    - name: Install dependencies
       run: |
         sudo apt update
         sudo apt install -y \
           git zip unzip openjdk-17-jdk \
-          autoconf libtool pkg-config \
-          zlib1g-dev libncurses5-dev \
-          libncursesw5-dev libtinfo5 \
-          cmake libffi-dev libssl-dev
+          autoconf libtool pkg-config zlib1g-dev \
+          libncurses5-dev libncursesw5-dev \
+          cmake libffi-dev libssl-dev \
+          python3-pip python3-setuptools
 
+    # 🐍 Upgrade pip
     - name: Upgrade pip
-      run: |
-        python3 -m pip install --upgrade pip
+      run: python3 -m pip install --upgrade pip
 
+    # 🚀 Install latest buildozer + python-for-android
     - name: Install Buildozer
       run: |
-        pip3 install buildozer cython
+        pip3 install --upgrade \
+          buildozer \
+          cython==0.29.36 \
+          python-for-android
 
-    - name: Prepare Buildozer directory
+    - name: Show versions
       run: |
-        mkdir -p ~/.buildozer
+        buildozer --version
+        python3 -m pythonforandroid.toolchain --version || true
 
-    - name: Build APK (verbose)
+    # 📦 Build APK (verbose mode)
+    - name: Build APK
       run: |
         buildozer -v android debug
 
-    - name: Upload APK artifact
+    # 📤 Upload generated APK
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: kivy-apk
+        name: MyBuckConverter-APK
         path: bin/*.apk
