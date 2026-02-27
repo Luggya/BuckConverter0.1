@@ -113,10 +113,10 @@ android.sdk = 33
 android.ndk = 23b
 
 #build_tools
-android.build_tools_version = 36.1.0
+#android.build_tools_version = 36.1.0
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
-#android.ndk_api = 21
+android.ndk_api = 21
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 #android.private_storage = True
