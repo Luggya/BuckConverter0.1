@@ -1,4 +1,5 @@
 
+
 name: Build Kivy APK
 
 on:
@@ -18,22 +19,28 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Clean previous buildozer cache
+      run: |
+        rm -rf ~/.buildozer
+        rm -rf ./.buildozer
+        rm -rf ./bin
+
     - name: Install system dependencies
       run: |
         sudo apt update
         sudo apt install -y git zip unzip openjdk-17-jdk \
         autoconf libtool pkg-config zlib1g-dev \
         libncurses5-dev libncursesw5-dev libtinfo5 \
-        cmake libffi-dev libssl-dev
+        cmake libffi-dev libssl-dev python3.10 python3.10-venv python3.10-dev
 
     - name: Upgrade pip
       run: python3 -m pip install --upgrade pip
 
-    - name: Install Buildozer
+    - name: Install Buildozer & Cython
       run: pip3 install buildozer cython
 
-    - name: Prepare Buildozer directory
-      run: mkdir -p ~/.buildozer
+    - name: Check Buildozer version
+      run: buildozer --version
 
     - name: Build APK (verbose)
       run: |
