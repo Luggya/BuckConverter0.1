@@ -56,7 +56,6 @@ android.archs = arm64-v8a, armeabi-v7a
 android.allow_backup = True
 
 
-[buildozer]
 
 # (int) Log level (0 = errors only, 2 = debug)
 log_level = 2
